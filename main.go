@@ -27,6 +27,7 @@ type ApiResponse struct {
 	URL    string   `json:"uri"`
 	Status string   `json:"status"`
 	Links  []string `json:"links"`
+	stream int      `json:"streamable"`
 }
 
 type handleMagnet struct {
@@ -216,6 +217,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	Link := apiResp4.Links[0]
 	Status := apiResp4.Status
+	Stream := apiResp4.stream
 
 	// Extract the id from the response
 
@@ -296,6 +298,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	} else {
 		w.Write([]byte("Torrent not downloaded yet"))
 	}
+
 }
 
 func createMux(version string) *http.ServeMux {
