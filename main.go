@@ -266,8 +266,8 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		id4 := apiResp3.ID
-		streamURL := fmt.Sprintf("https://real-debrid.com/streaming-%s", id4)
+		// id4 := apiResp3.ID
+		// streamURL := fmt.Sprintf("https://real-debrid.com/streaming-%s", id4)
 
 		// Step 2: Unmarshal into a raw map to modify fields
 		var raw map[string]json.RawMessage
@@ -281,8 +281,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		delete(raw, "id")
 		delete(raw, "host")
 
-		// Step 4: Add the "watch_now" field
-		raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
+		// raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
 
 		// Step 5: Marshal the updated map
 		updatedJSON, err := json.Marshal(raw)
