@@ -269,10 +269,6 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 		Strem := apiResp3.Stream
 
-		if Strem == 1 {
-
-		}
-
 		// id4 := apiResp3.ID
 		// streamURL := fmt.Sprintf("https://real-debrid.com/streaming-%s", id4)
 
@@ -288,6 +284,11 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		delete(raw, "host")
 		delete(raw, "host_icon")
 		delete(raw, "streamable")
+
+		if Strem == 1 {
+
+			fmt.Println("Streamable")
+		}
 
 		// raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
 
