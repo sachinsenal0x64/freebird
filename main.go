@@ -27,6 +27,7 @@ type ApiResponse struct {
 	URL    string   `json:"uri"`
 	Status string   `json:"status"`
 	Links  []string `json:"links"`
+	Stream int      `json:"streamable"`
 }
 
 type handleMagnet struct {
@@ -216,7 +217,6 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	Link := apiResp4.Links[0]
 	Status := apiResp4.Status
-	Stream := apiResp4.stream
 
 	// Extract the id from the response
 
@@ -267,6 +267,12 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
+		Strem := apiResp3.Stream
+
+		if Strem == 1 {
+
+		}
+
 		// id4 := apiResp3.ID
 		// streamURL := fmt.Sprintf("https://real-debrid.com/streaming-%s", id4)
 
@@ -277,10 +283,11 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		delete(raw, "streamable")
 		delete(raw, "link")
 		delete(raw, "id")
 		delete(raw, "host")
+		delete(raw, "host_icon")
+		delete(raw, "streamable")
 
 		// raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
 
