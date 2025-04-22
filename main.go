@@ -215,6 +215,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// Extract the id from the response
 
 	Link := apiResp4.Links[0]
+	Status := apiResp4.Status
 
 	// Extract the id from the response
 
@@ -228,43 +229,74 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	selectFilesUrl3 := globalEnv.apiUrl + "/unrestrict/link"
 
-	// Prepare the HTTP request
-	req, err = http.NewRequest("POST", selectFilesUrl3, payload3)
-	if err != nil {
-		http.Error(w, "Error creating new request", http.StatusInternalServerError)
-		log.Println("Error creating request:", err)
-		return
+	if Status == "downloaded" {
+
+		// Prepare the HTTP request
+		req, err = http.NewRequest("POST", selectFilesUrl3, payload3)
+		if err != nil {
+			http.Error(w, "Error creating new request", http.StatusInternalServerError)
+			log.Println("Error creating request:", err)
+			return
+		}
+
+		req.Header.Set("Authorization", "Bearer "+globalEnv.apiKey)
+
+		// Make the request
+		client4 := &http.Client{}
+		resp4, err := client4.Do(req)
+		if err != nil {
+			http.Error(w, "Error making API request", http.StatusInternalServerError)
+			log.Println("Error making request:", err)
+			return
+		}
+		defer resp4.Body.Close()
+
+		// Read and handle the response
+		respBody4, err := io.ReadAll(resp4.Body)
+		if err != nil {
+			http.Error(w, "Error reading response body", http.StatusInternalServerError)
+			log.Println("Error reading response body:", err)
+			return
+		}
+
+		// Unmarshal the JSON response into the ApiResponse struct
+		var apiResp3 ApiResponse
+		if err := json.Unmarshal(respBody4, &apiResp3); err != nil {
+			http.Error(w, "Error unmarshaling response", http.StatusInternalServerError)
+			return
+		}
+
+		id4 := apiResp3.ID
+		streamURL := fmt.Sprintf("https://real-debrid.com/streaming-%s", id4)
+
+		// Step 2: Unmarshal into a raw map to modify fields
+		var raw map[string]json.RawMessage
+		if err := json.Unmarshal(respBody4, &raw); err != nil {
+			http.Error(w, "Error unmarshaling JSON", http.StatusInternalServerError)
+			return
+		}
+
+		delete(raw, "streamable")
+		delete(raw, "link")
+		delete(raw, "id")
+		delete(raw, "host")
+
+		// Step 4: Add the "watch_now" field
+		raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
+
+		// Step 5: Marshal the updated map
+		updatedJSON, err := json.Marshal(raw)
+		if err != nil {
+			http.Error(w, "Error marshaling updated JSON", http.StatusInternalServerError)
+			return
+		}
+
+		// Write response
+		w.Write(updatedJSON)
+
+	} else {
+		w.Write([]byte("Torrent not downloaded yet"))
 	}
-
-	req.Header.Set("Authorization", "Bearer "+globalEnv.apiKey)
-
-	// Make the request
-	client4 := &http.Client{}
-	resp4, err := client4.Do(req)
-	if err != nil {
-		http.Error(w, "Error making API request", http.StatusInternalServerError)
-		log.Println("Error making request:", err)
-		return
-	}
-	defer resp4.Body.Close()
-
-	// Read and handle the response
-	respBody4, err := io.ReadAll(resp4.Body)
-	if err != nil {
-		http.Error(w, "Error reading response body", http.StatusInternalServerError)
-		log.Println("Error reading response body:", err)
-		return
-	}
-
-	// Unmarshal the JSON response into the ApiResponse struct
-	var apiResp3 ApiResponse
-	if err := json.Unmarshal(respBody4, &apiResp3); err != nil {
-		http.Error(w, "Error unmarshaling response", http.StatusInternalServerError)
-		return
-	}
-
-	w.Write(respBody4)
-
 }
 
 func createMux(version string) *http.ServeMux {
