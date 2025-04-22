@@ -286,7 +286,6 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		delete(raw, "streamable")
 
 		if Strem == 1 {
-
 			fmt.Println("Streamable")
 		}
 
