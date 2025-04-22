@@ -27,7 +27,6 @@ type ApiResponse struct {
 	URL    string   `json:"uri"`
 	Status string   `json:"status"`
 	Links  []string `json:"links"`
-	stream int      `json:"streamable"`
 }
 
 type handleMagnet struct {
