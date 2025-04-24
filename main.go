@@ -52,13 +52,11 @@ func NewEnv() (*env, error) {
 
 	apiKey := os.Getenv("API_KEY")
 	if apiKey == "" {
-		// Decide if this is fatal. Let's assume it is for this example.
 		return nil, fmt.Errorf("API_KEY environment variable not set")
 	}
 
 	apiUrl := os.Getenv("SERVER_HOST")
 	if apiUrl == "" {
-		// Decide if this is fatal. Let's assume it is for this example.
 		return nil, fmt.Errorf("SERVER_HOST environment variable not set")
 	}
 
@@ -74,9 +72,6 @@ func (ch constantHandler) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	var magnet string
-
-	fmt.Println(globalEnv.apiKey)
-	fmt.Println(globalEnv.apiUrl)
 
 	queryMagnet := req.URL.Query().Get("uri")
 	if queryMagnet != "" {
@@ -200,6 +195,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// Read and handle the response
 	respBody3, err := io.ReadAll(resp3.Body)
+
 	if err != nil {
 		http.Error(w, "Error reading response body", http.StatusInternalServerError)
 		log.Println("Error reading response body:", err)
@@ -254,6 +250,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 		// Read and handle the response
 		respBody4, err := io.ReadAll(resp4.Body)
+
 		if err != nil {
 			http.Error(w, "Error reading response body", http.StatusInternalServerError)
 			log.Println("Error reading response body:", err)
@@ -267,11 +264,6 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		Strem := apiResp3.Stream
-
-		// id4 := apiResp3.ID
-		// streamURL := fmt.Sprintf("https://real-debrid.com/streaming-%s", id4)
-
 		// Step 2: Unmarshal into a raw map to modify fields
 		var raw map[string]json.RawMessage
 		if err := json.Unmarshal(respBody4, &raw); err != nil {
@@ -279,15 +271,10 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		delete(raw, "link")
 		delete(raw, "id")
+		delete(raw, "link")
 		delete(raw, "host")
 		delete(raw, "host_icon")
-		delete(raw, "streamable")
-
-		if Strem == 1 {
-			fmt.Println("Streamable")
-		}
 
 		// raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
 
@@ -298,7 +285,7 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		// Write response
+		w.WriteHeader(http.StatusOK)
 		w.Write(updatedJSON)
 
 	} else {
@@ -311,7 +298,6 @@ func createMux(version string) *http.ServeMux {
 	mux := http.NewServeMux()
 	if version == "v1" {
 		mux.Handle("/magnet", handleMagnet{})
-		mux.Handle("/torrent", constantHandler{version + "torrent"})
 	}
 
 	return mux
