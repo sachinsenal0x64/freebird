@@ -3,3 +3,75 @@
   ![freebird](https://github.com/sachinsenal0x64/picx-images-hosting/raw/master/freebird.4n7w6lshyp.webp)
  
 </div>
+
+
+# 💨 Quick Start
+
+<br>
+
+## 📡 API DOCUMENTATION (No account required)
+
+
+------------------------------------------------------------------------------------------
+
+<details>
+
+ <summary><code>GET</code>   <code><b>/v1/magnet</b></code> </summary>
+
+#### Example
+
+
+<br>
+
+> | Parameter  |   Type    | Description |
+> |------------|-----------|-------------|
+> | `uri`      |  string   |  magnet = `magnet:?xt` |
+
+
+
+<br>
+
+
+## Request
+
+>xh
+
+    xh GET  https://freebird-tumj.onrender.com/v1/magnet?uri="magnet:?xt"
+    
+
+<br>
+
+
+### Response
+
+  ```json
+{
+  "chunks": 32,
+  "crc": 1,
+  "download": "abc",
+  "filename": "abc",
+  "id": "abc",
+  "mimeType": "video/x-matroska",
+  "streamable": 1
+}
+
+```
+<br>
+
+
+### Status Codes
+
+Freebird returns the following status codes in its API:
+
+> | Status Code | Description |
+> | :---        | :--- |
+> | 200         | `OK` |
+> | 422         | `UNPROCESSABLE CONTENT` |
+> | 404         | `NOT FOUND` |
+> | 500         | `INTERNAL SERVER ERROR` |
+
+
+</details>
+
+------------------------------------------------------------------------------------------
+
