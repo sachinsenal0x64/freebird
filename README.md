@@ -7,7 +7,6 @@
 
 # 💨 Quick Start
 
-<br>
 
 ## 📡 API DOCUMENTATION (No account required)
 
