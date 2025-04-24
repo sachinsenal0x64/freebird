@@ -4,6 +4,10 @@
  
 </div>
 
+## 🎞️ DEMO
+
+[![hifi tui](https://img.youtube.com/vi/_cwmAqvnJ68/0.jpg)](https://www.youtube.com/watch?v=_cwmAqvnJ68)
+
 
 # 💨 Quick Start
 
