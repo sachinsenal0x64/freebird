@@ -43,8 +43,7 @@
 
 >xh
 
-    xh GET  https://dl.401658.xyz/v1/magnet?uri="magnet:?xt"
-    
+    xh GET https://freebird-tumj.onrender.com/v1/magnet?uri="magnet:?xt"
 
 <br>
 
