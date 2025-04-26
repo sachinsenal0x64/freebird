@@ -11,6 +11,9 @@
 
 # 💨 Quick Start
 
+> Got a torrent file? Convert it to a magnet link: https://nutbread.github.io/t2m/
+
+
 <br>
 
 ## 📡 API DOCUMENTATION (No account required)
