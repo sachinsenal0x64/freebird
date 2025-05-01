@@ -4,6 +4,13 @@
  
 </div>
 
+# 💕 Community
+
+> 🍻 Join the community:  <a href="https://discord.gg/EbfftZ5Dd4">Discord</a>
+> [![](https://cdn.statically.io/gh/sachinsenal0x64/picx-images-hosting@master/discord.72y8nlaw5mdc.webp)](https://discord.gg/EbfftZ5Dd4)
+ 
+<br><br>
+
 ## 🎞️ DEMO
 
 [![hifi tui](https://img.youtube.com/vi/_cwmAqvnJ68/0.jpg)](https://www.youtube.com/watch?v=_cwmAqvnJ68)
