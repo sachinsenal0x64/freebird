@@ -87,5 +87,3 @@ Freebird returns the following status codes in its API:
 </details>
 
 ------------------------------------------------------------------------------------------
-
-# Enjoy
