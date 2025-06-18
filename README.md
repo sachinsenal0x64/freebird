@@ -25,6 +25,18 @@
 
 > Got a torrent file? Convert it to a magnet link: https://nutbread.github.io/t2m/
 
+## Installation
+
+```sh
+git clone https://github.com/sachinsenal0x64/freebird
+
+go get
+
+go mod tidy
+
+go run .
+
+```
 
 <br>
 
