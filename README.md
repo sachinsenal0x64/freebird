@@ -12,7 +12,7 @@
 <br><br>
 
 > [!NOTE]
-> Currently, it's down. I will move my APIs to a new server, which might take some time.
+> Currently, it's down. I will move my APIs to a new server, which might take some time..
 
 <br><br>
 
