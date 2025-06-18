@@ -30,6 +30,8 @@
 ```sh
 git clone https://github.com/sachinsenal0x64/freebird
 
+cd freebird
+
 go get
 
 go mod tidy
