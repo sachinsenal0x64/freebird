@@ -34,7 +34,7 @@
 
 - Golang
 - Git
-- Real-Debrid Account
+- Real-Debrid API Key 
 
 ```sh
 git clone https://github.com/sachinsenal0x64/freebird
@@ -54,6 +54,10 @@ go run .
 <br>
 
 ## 📡 API DOCUMENTATION (No account required)
+
+## Requirements
+
+None
 
 
 ------------------------------------------------------------------------------------------
