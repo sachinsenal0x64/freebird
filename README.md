@@ -30,6 +30,12 @@
 > [!NOTE]
 > open .env and fill in the required values.
 
+## Requirements
+
+- Golang
+- Git
+- Real-Debrid Account
+
 ```sh
 git clone https://github.com/sachinsenal0x64/freebird
 
