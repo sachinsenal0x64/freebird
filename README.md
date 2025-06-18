@@ -55,9 +55,6 @@ go run .
 
 ## 📡 API DOCUMENTATION (No account required)
 
-## Requirements
-
-None
 
 
 ------------------------------------------------------------------------------------------
