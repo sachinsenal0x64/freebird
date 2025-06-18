@@ -1,4 +1,4 @@
-module main
+module github.com/sachinsenal0x64/freebird
 
 go 1.24.4
 
