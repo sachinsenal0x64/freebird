@@ -12,7 +12,7 @@
 <br><br>
 
 > [!NOTE]
-> Currently, it's down. I will move my APIs to a new server, which might take some time..
+> Currently, it's down. I will move my APIs to a new server, which might take some time.
 
 <br><br>
 
@@ -27,10 +27,15 @@
 
 ## Installation
 
+> [!NOTE]
+> open .env and fill in the required values.
+
 ```sh
 git clone https://github.com/sachinsenal0x64/freebird
 
 cd freebird
+
+mv env .env 
 
 go get
 
