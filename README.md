@@ -74,7 +74,7 @@ go run .
 
 >xh
 
-    xh GET https://freebird.401658.xyz/v1/magnet?uri="magnet:?xt"
+    xh GET https://freebird.401658.xyz/v1/magnet?uri=magnet:?xt
 
 <br>
 
