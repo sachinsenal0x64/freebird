@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "6000:6000"
+    command: ./app
+    restart: unless-stopped
+

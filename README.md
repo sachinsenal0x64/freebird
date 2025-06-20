@@ -11,11 +11,6 @@
  
 <br><br>
 
-> [!NOTE]
-> Currently, it's down. I will move my APIs to a new server, which might take some time.
-
-<br><br>
-
 ## 🎞️ DEMO
 
 [![hifi tui](https://img.youtube.com/vi/_cwmAqvnJ68/0.jpg)](https://www.youtube.com/watch?v=_cwmAqvnJ68)
