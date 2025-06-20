@@ -41,7 +41,7 @@ git clone https://github.com/sachinsenal0x64/freebird
 
 cd freebird
 
-mv env .env 
+mv env-example .env 
 
 go get
 
