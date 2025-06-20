@@ -38,8 +38,6 @@ cd freebird
 
 mv env-example .env 
 
-go get
-
 go mod tidy
 
 go run .
