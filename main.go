@@ -323,9 +323,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	ip := GetOutboundIP()
-
-	addressFormat := fmt.Sprintf("%s:%d", ip, 9000)
+	addressFormat := fmt.Sprintf("%s:%d", "0.0.0.0", 9000)
 
 	w := os.Stderr
 
