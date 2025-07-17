@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -147,8 +148,6 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	payload2 := strings.NewReader(encodedFormData2)
 
-	fmt.Println(payload2)
-
 	selectFilesUrl := globalEnv.apiUrl + "/torrents/selectFiles/" + ID
 
 	// Create request
@@ -209,89 +208,70 @@ func (mg handleMagnet) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Extract the id from the response
+	if apiResp4.Status == "downloaded" {
+		var (
+			wg         sync.WaitGroup
+			mu         sync.Mutex
+			allResults []map[string]json.RawMessage
+		)
 
-	Link := apiResp4.Links[0]
-	Status := apiResp4.Status
+		for _, link := range apiResp4.Links {
+			wg.Add(1)
 
-	// Extract the id from the response
+			link := link
 
-	formData3 := url.Values{}
+			go func() {
+				defer wg.Done()
 
-	formData3.Set("link", Link)
+				formData := url.Values{}
+				formData.Set("link", link)
+				payload := strings.NewReader(formData.Encode())
 
-	encodedFormData3 := formData3.Encode()
+				req, err := http.NewRequest("POST", globalEnv.apiUrl+"/unrestrict/link", payload)
+				if err != nil {
+					log.Println("Failed to create request for link:", link, err)
+					return
+				}
+				req.Header.Set("Authorization", "Bearer "+globalEnv.apiKey)
 
-	payload3 := strings.NewReader(encodedFormData3)
+				client := &http.Client{}
+				resp, err := client.Do(req)
+				if err != nil {
+					log.Println("Failed to call API for link:", link, err)
+					return
+				}
+				body, err := io.ReadAll(resp.Body)
+				resp.Body.Close()
+				if err != nil {
+					log.Println("Failed to read response for link:", link, err)
+					return
+				}
 
-	selectFilesUrl3 := globalEnv.apiUrl + "/unrestrict/link"
+				var raw map[string]json.RawMessage
+				if err := json.Unmarshal(body, &raw); err != nil {
+					log.Println("Failed to unmarshal response for link:", link, err)
+					return
+				}
 
-	if Status == "downloaded" {
+				delete(raw, "id")
+				delete(raw, "link")
+				delete(raw, "host")
+				delete(raw, "host_icon")
 
-		// Prepare the HTTP request
-		req, err = http.NewRequest("POST", selectFilesUrl3, payload3)
-		if err != nil {
-			http.Error(w, "Error creating new request", http.StatusInternalServerError)
-			log.Println("Error creating request:", err)
-			return
+				mu.Lock()
+				allResults = append(allResults, raw)
+				mu.Unlock()
+			}()
 		}
 
-		req.Header.Set("Authorization", "Bearer "+globalEnv.apiKey)
+		wg.Wait()
 
-		// Make the request
-		client4 := &http.Client{}
-		resp4, err := client4.Do(req)
-		if err != nil {
-			http.Error(w, "Error making API request", http.StatusInternalServerError)
-			log.Println("Error making request:", err)
-			return
-		}
-		defer resp4.Body.Close()
-
-		// Read and handle the response
-		respBody4, err := io.ReadAll(resp4.Body)
-
-		if err != nil {
-			http.Error(w, "Error reading response body", http.StatusInternalServerError)
-			log.Println("Error reading response body:", err)
-			return
-		}
-
-		// Unmarshal the JSON response into the ApiResponse struct
-		var apiResp3 ApiResponse
-		if err := json.Unmarshal(respBody4, &apiResp3); err != nil {
-			http.Error(w, "Error unmarshaling response", http.StatusInternalServerError)
-			return
-		}
-
-		// Step 2: Unmarshal into a raw map to modify fields
-		var raw map[string]json.RawMessage
-		if err := json.Unmarshal(respBody4, &raw); err != nil {
-			http.Error(w, "Error unmarshaling JSON", http.StatusInternalServerError)
-			return
-		}
-
-		delete(raw, "id")
-		delete(raw, "link")
-		delete(raw, "host")
-		delete(raw, "host_icon")
-
-		// raw["watch_now"] = json.RawMessage(fmt.Sprintf(`"%s"`, streamURL))
-
-		// Step 5: Marshal the updated map
-		updatedJSON, err := json.Marshal(raw)
-		if err != nil {
-			http.Error(w, "Error marshaling updated JSON", http.StatusInternalServerError)
-			return
-		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write(updatedJSON)
-
+		json.NewEncoder(w).Encode(allResults)
 	} else {
 		w.Write([]byte("Torrent not downloaded yet"))
 	}
-
 }
 
 func createMux(version string) *http.ServeMux {
