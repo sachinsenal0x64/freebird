@@ -1,5 +1,5 @@
 > [!IMPORTANT]  
-> Temporarily down due to Real-Debrid account restriction.
+> Down due to Real-Debrid account restriction. You can still use this without any issues, but don’t publish or share it run it locally with your own Real-Debrid account
 
 
 <div align="center">
